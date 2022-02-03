@@ -1,15 +1,27 @@
 //let addMonster = false;
-
 document.addEventListener("DOMContentLoaded", () => {
   const createMonster = document.getElementById('create-monster');
+  monsterSubmitForm()
   const monsterCointainer = document.getElementById('monster-container');
-  //const back = document.getElementById('back');
-  //const forward = document.getElementById('forward');
-
+  const monsterForm = document.querySelector('form');
   
+  monsterForm.addEventListener('submit', (event) => {
+    event.preventDefault()
+
+    let monsterObj = {
+      name: event.target.name.value,
+      age: event.target.age.value,
+      description: event.target.description.value
+    }
+
+    handleSubmit(monsterObj)
+    console.log('monster')
+  })
+
   function getAllMonsters() {
     fetch('http://localhost:3000/monsters')
     .then(res => res.json())
+    .then(monsterData => console.log(monsterData))
     .then(monsterData => {
       // grab the monster container
       // const monsterCointainer = document.getElementById('monster-container');
@@ -29,7 +41,30 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     })
   }
+  
+  function handleSubmit(monsterObj){
+    addMonster(monsterObj);
+  }
 
+  function addMonster(monsterObj) {
+    //console.log(monsterObj, 'monsterobj')
+    fetch('http://localhost:3000/monsters',{
+      method: 'POST',
+      headers:
+      {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        name: monsterObj.name, 
+        age: monsterObj.age, 
+        description: monsterObj.description 
+      })
+    })
+    .then(res => res.json())
+    .catch(e => console.log(monster))
+  }
+  
   function monsterSubmitForm() {
     const form = document.createElement('form')
     form.innerHTML = `
@@ -68,82 +103,9 @@ document.addEventListener("DOMContentLoaded", () => {
       />
     </form>
     `
+    console.log(createMonster)
     createMonster.appendChild(form)
   }
 
-  // const createMonster = document.getElementById('create-monster').addEventListener('submit', (e) => {
-  //   handleSubmit(e)
-  // })
-  // console.log(createMonster)
-  
-  // function handleSubmit(e){
-  //   e.preventDefault()
-
-  //   let monsterObj = {
-  //     name: e.target.name.value,
-  //     age: e.target.age.value,
-  //     description: e.target.description.value
-  //   }
-  //   getAllMonsters(monsterObj);
-  //   addMonster(monsterObj);
-  // }
-
-  // function addMonster(monsterObj) {
-  //   console.log(monsterObj, 'monsterobj')
-  //   fetch('http://localhost:3000/monsters',{
-  //     method: 'POST',
-  //     headers:
-  //     {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json"
-  //     },
-  //     body:
-  //     { 
-  //       name: string, 
-  //       age: number, 
-  //       description: string 
-  //     }
-  //   })
-  // }
-
-
-  function intialize() {
-    getAllMonsters()
-  }
-  intialize()
+  getAllMonsters()
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// get http://localhost:3000/monsters
-
-// ## Deliverables
-
-// - When the page loads, show the first 50 monsters. Each monster's name, age, and
-//   description should be shown.
-// - Above your list of monsters, you should have a form to create a new monster.
-//   You should have fields for name, age, and description, and a 'Create Monster
-//   Button'. When you click the button, the monster should be added to the list
-//   and saved in the API.
-// - At the end of the list of monsters, show a button. When clicked, the button
-//   should load the next 50 monsters and show them
