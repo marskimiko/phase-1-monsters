@@ -21,11 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function getAllMonsters() {
     fetch('http://localhost:3000/monsters')
     .then(res => res.json())
-    .then(monsterData => console.log(monsterData))
+    //.then(monsterData => console.log(monsterData))
     .then(monsterData => {
       // grab the monster container
       // const monsterCointainer = document.getElementById('monster-container');
-      monsterData.forEach(monster => {
+      monsterData.slice(0, 50).forEach(monster => {
         // declare new div to hold the monster information
         const card = document.createElement('div')
         // set innerHTML to have all info I want on the page
